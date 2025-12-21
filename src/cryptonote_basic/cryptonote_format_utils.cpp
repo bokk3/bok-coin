@@ -1129,6 +1129,7 @@ namespace cryptonote
     {
       case 12:
       case 9:
+      case 8:
       case 6:
       case 3:
       case 0:
@@ -1154,6 +1155,8 @@ namespace cryptonote
         return "monero";
       case 9:
         return "millinero";
+      case 8:
+        return "bokcoin"; 
       case 6:
         return "micronero";
       case 3:
