@@ -1335,8 +1335,6 @@ bool Blockchain::validate_miner_transaction(const block& b, size_t cumulative_bl
   uint64_t money_in_use = 0;
   for (auto& o: b.miner_tx.vout)
     money_in_use += o.amount;
-  partial_block_reward = false;
-
   if (version == 3) {
     for (auto &o: b.miner_tx.vout) {
       if (!is_valid_decomposed_amount(o.amount)) {

@@ -141,6 +141,25 @@ namespace daemon_args
   , "Disable ZMQ RPC server"
   };
 
+  // Genesis TX generation for premine
+  const command_line::arg_descriptor<bool> arg_generate_genesis_tx = {
+    "generate-genesis-tx"
+  , "Generate a genesis transaction hex for use in cryptonote_config.h (use with --premine-address)"
+  , false
+  };
+
+  const command_line::arg_descriptor<std::string> arg_premine_address = {
+    "premine-address"
+  , "Address to receive the premine in the genesis transaction"
+  , ""
+  };
+
+  const command_line::arg_descriptor<uint64_t> arg_premine_amount = {
+    "premine-amount"
+  , "Amount of premine in atomic units (default: 1000000 BOK = 100000000000000)"
+  , 100000000000000ULL  // 1 million BOK with 8 decimals
+  };
+
 }  // namespace daemon_args
 
 #endif // DAEMON_COMMAND_LINE_ARGS_H

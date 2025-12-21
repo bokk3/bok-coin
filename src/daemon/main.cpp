@@ -44,6 +44,8 @@
 #include "rpc/core_rpc_server.h"
 #include "rpc/rpc_args.h"
 #include "daemon/command_line_args.h"
+#include "cryptonote_core/cryptonote_tx_utils.h"
+#include "cryptonote_basic/cryptonote_format_utils.h"
 #include "version.h"
 
 #ifdef STACK_TRACE
@@ -160,6 +162,11 @@ int main(int argc, char const * argv[])
       command_line::add_arg(core_settings, daemon_args::arg_zmq_pub);
       command_line::add_arg(core_settings, daemon_args::arg_zmq_rpc_disabled);
 
+      // Genesis TX generation
+      command_line::add_arg(visible_options, daemon_args::arg_generate_genesis_tx);
+      command_line::add_arg(visible_options, daemon_args::arg_premine_address);
+      command_line::add_arg(visible_options, daemon_args::arg_premine_amount);
+
       daemonizer::init_options(hidden_options, visible_options);
       daemonize::t_executor::init_options(core_settings);
 
@@ -207,6 +214,77 @@ int main(int argc, char const * argv[])
     if (command_line::get_arg(vm, daemon_args::arg_os_version))
     {
       std::cout << "OS: " << tools::get_os_version_string() << ENDL;
+      return 0;
+    }
+
+    // Generate Genesis TX with premine
+    if (command_line::get_arg(vm, daemon_args::arg_generate_genesis_tx))
+    {
+      std::string premine_address = command_line::get_arg(vm, daemon_args::arg_premine_address);
+      uint64_t premine_amount = command_line::get_arg(vm, daemon_args::arg_premine_amount);
+      
+      if (premine_address.empty())
+      {
+        std::cerr << "Error: --premine-address is required when using --generate-genesis-tx" << std::endl;
+        std::cerr << "Usage: bokcoind --generate-genesis-tx --premine-address <YOUR_BOK_ADDRESS> [--premine-amount <ATOMIC_UNITS>]" << std::endl;
+        return 1;
+      }
+
+      // Parse the address
+      cryptonote::address_parse_info addr_info;
+      if (!cryptonote::get_account_address_from_str(addr_info, cryptonote::MAINNET, premine_address))
+      {
+        std::cerr << "Error: Invalid BOK-coin address: " << premine_address << std::endl;
+        return 1;
+      }
+
+      if (addr_info.is_subaddress)
+      {
+        std::cerr << "Error: Subaddress cannot be used for genesis premine" << std::endl;
+        return 1;
+      }
+
+      // Create the genesis transaction
+      cryptonote::transaction tx;
+      
+      // Construct the miner tx with premine
+      tx.version = 1;
+      tx.unlock_time = CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW;
+      
+      // Add the premine output
+      cryptonote::txin_gen in;
+      in.height = 0;
+      tx.vin.push_back(in);
+      
+      // Generate the output key
+      crypto::key_derivation derivation;
+      crypto::public_key out_eph_public_key;
+      crypto::generate_key_derivation(addr_info.address.m_view_public_key, crypto::null_skey, derivation);
+      crypto::derive_public_key(derivation, 0, addr_info.address.m_spend_public_key, out_eph_public_key);
+      
+      cryptonote::tx_out out;
+      out.amount = premine_amount;
+      out.target = cryptonote::txout_to_key(out_eph_public_key);
+      tx.vout.push_back(out);
+      
+      // Serialize and output
+      cryptonote::blobdata tx_blob = cryptonote::tx_to_blob(tx);
+      std::string tx_hex = epee::string_tools::buff_to_hex_nodelimer(tx_blob);
+      
+      std::cout << std::endl;
+      std::cout << "=== GENESIS TRANSACTION GENERATED ===" << std::endl;
+      std::cout << std::endl;
+      std::cout << "Premine Address: " << premine_address << std::endl;
+      std::cout << "Premine Amount:  " << premine_amount << " atomic units" << std::endl;
+      std::cout << "                 (" << (premine_amount / 100000000.0) << " BOK)" << std::endl;
+      std::cout << std::endl;
+      std::cout << "Copy this to cryptonote_config.h as GENESIS_TX:" << std::endl;
+      std::cout << std::endl;
+      std::cout << "std::string const GENESIS_TX = \"" << tx_hex << "\";" << std::endl;
+      std::cout << std::endl;
+      std::cout << "Don't forget to also update GENESIS_NONCE to a unique value!" << std::endl;
+      std::cout << std::endl;
+      
       return 0;
     }
 

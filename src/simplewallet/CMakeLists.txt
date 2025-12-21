@@ -41,25 +41,25 @@ monero_add_executable(simplewallet
   ${simplewallet_private_headers})
 target_link_libraries(simplewallet
   PRIVATE
-    wallet
-    rpc_base
-    cryptonote_core
-    cncrypto
-    common
-    mnemonics
-    ${EPEE_READLINE}
-    qrcodegen
-    version
-    ${Boost_CHRONO_LIBRARY}
-    ${Boost_PROGRAM_OPTIONS_LIBRARY}
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_LOCALE_LIBRARY}
-    ${ICU_LIBRARIES}
-    ${Boost_THREAD_LIBRARY}
-    ${CMAKE_THREAD_LIBS_INIT}
-    ${GNU_READLINE_LIBRARY}
-    ${EXTRA_LIBRARIES})
+  wallet
+  rpc_base
+  cryptonote_core
+  cncrypto
+  common
+  mnemonics
+  ${EPEE_READLINE}
+  qrcodegen
+  version
+  ${Boost_CHRONO_LIBRARY}
+  ${Boost_PROGRAM_OPTIONS_LIBRARY}
+  ${Boost_FILESYSTEM_LIBRARY}
+  ${Boost_LOCALE_LIBRARY}
+  ${ICU_LIBRARIES}
+  ${Boost_THREAD_LIBRARY}
+  ${CMAKE_THREAD_LIBS_INIT}
+  ${GNU_READLINE_LIBRARY}
+  ${EXTRA_LIBRARIES})
 set_property(TARGET simplewallet
   PROPERTY
-    OUTPUT_NAME "monero-wallet-cli")
+  OUTPUT_NAME "bokcoin-wallet-cli")
 install(TARGETS simplewallet DESTINATION bin)

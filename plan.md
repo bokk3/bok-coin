@@ -235,3 +235,127 @@ Known issues
 Expected behavior
 
 This document defines the complete set of changes required to produce a functional BOK‑coin alpha release suitable for internal testing among premine participants. All modifications should be applied to the bok-mainnet branch derived from Monero v0.18.4.4.
+
+BOK‑coin: Genesis Block + Daemon + Wallet Bring‑Up Guide
+
+(IDE‑friendly, copy/paste ready)
+
+1. Verify and Set Chain Constants
+
+Before mining the genesis block, ensure the following files contain correct values:
+Files to edit:
+
+    src/cryptonote_config.h
+
+    src/cryptonote_basic/cryptonote_basic.h
+
+    src/cryptonote_core/cryptonote_tx_utils.cpp
+
+    src/cryptonote_core/cryptonote_basic_impl.cpp
+
+Required values:
+
+    network identifiers
+
+        MAINNET
+
+        TESTNET
+
+        STAGENET
+
+    address prefixes
+
+        PUBLIC_ADDRESS_BASE58_PREFIX
+
+        PUBLIC_SUBADDRESS_BASE58_PREFIX
+
+        INTEGRATED_ADDRESS_BASE58_PREFIX
+
+    ports
+
+        P2P
+
+        RPC
+
+        ZMQ (optional)
+
+    block time
+
+        DIFFICULTY_TARGET
+
+    money supply
+
+        MONEY_SUPPLY
+
+        EMISSION_SPEED_FACTOR
+
+    genesis placeholders
+
+        GENESIS_COINBASE_TX_HEX = ""
+
+        GENESIS_NONCE = 0
+
+        GENESIS_TIMESTAMP = 0
+
+2. Clean Build the Daemon
+
+cd bok-coin
+rm -rf build
+mkdir -p build/Linux/bok-mainnet/release
+cd build/Linux/bok-mainnet/release
+cmake -D CMAKE_BUILD_TYPE=Release ../..
+make -j$(nproc)
+
+3. Generate the Genesis Coinbase Transaction
+
+./bokd --print-genesis-tx
+
+The output will contain:
+
+GENESIS_COINBASE_TX_HEX: <hex>
+
+Copy the hex string.
+
+4. Insert the Genesis TX Into the Source
+
+inside src/cryptonote_config.h set:
+
+#define GENESIS_COINBASE_TX_HEX "<your hex>"
+
+cd bok-coin/build/Linux/bok-mainnet/release
+make clean
+make -j$(nproc)
+
+./bokd
+
+Expected output:
+
+    genesis block hash printed
+
+    chain height starts at 0
+
+    no errors
+
+If the daemon rejects its own genesis block, constants mismatch.
+
+./bok-wallet-cli --generate-new-wallet mywallet
+
+This will:
+
+    generate seed
+
+    generate keys
+
+    connect to daemon
+
+    scan chain (empty except genesis)
+
+./bokd --start-mining <your-address>
+OR start_mining <your-address>
+
+9. Verify Rewards
+
+In the wallet:
+
+refresh
+balance

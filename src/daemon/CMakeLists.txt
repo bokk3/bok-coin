@@ -47,29 +47,29 @@ monero_add_executable(daemon
   ${daemon_private_headers})
 target_link_libraries(daemon
   PRIVATE
-    rpc
-    blockchain_db
-    cryptonote_core
-    cncrypto
-    common
-    p2p
-    cryptonote_protocol
-    daemonizer
-    serialization
-    daemon_rpc_server
-    ${EPEE_READLINE}
-    version
-    ${Boost_CHRONO_LIBRARY}
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_PROGRAM_OPTIONS_LIBRARY}
-    ${Boost_REGEX_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
-    ${CMAKE_THREAD_LIBS_INIT}
-    ${ZMQ_LIB}
-    ${GNU_READLINE_LIBRARY}
-    ${EXTRA_LIBRARIES}
-    ${Blocks})
+  rpc
+  blockchain_db
+  cryptonote_core
+  cncrypto
+  common
+  p2p
+  cryptonote_protocol
+  daemonizer
+  serialization
+  daemon_rpc_server
+  ${EPEE_READLINE}
+  version
+  ${Boost_CHRONO_LIBRARY}
+  ${Boost_FILESYSTEM_LIBRARY}
+  ${Boost_PROGRAM_OPTIONS_LIBRARY}
+  ${Boost_REGEX_LIBRARY}
+  ${Boost_SYSTEM_LIBRARY}
+  ${CMAKE_THREAD_LIBS_INIT}
+  ${ZMQ_LIB}
+  ${GNU_READLINE_LIBRARY}
+  ${EXTRA_LIBRARIES}
+  ${Blocks})
 set_property(TARGET daemon
   PROPERTY
-    OUTPUT_NAME "monerod")
+  OUTPUT_NAME "bokcoind")
 install(TARGETS daemon DESTINATION bin)

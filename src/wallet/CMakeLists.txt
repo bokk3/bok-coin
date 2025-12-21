@@ -49,22 +49,22 @@ monero_add_library(wallet
   ${wallet_private_headers})
 target_link_libraries(wallet
   PUBLIC
-    rpc_base
-    multisig
-    common
-    cryptonote_core
-    mnemonics
-    device_trezor
-    net
-    ${LMDB_LIBRARY}
-    ${Boost_CHRONO_LIBRARY}
-    ${Boost_SERIALIZATION_LIBRARY}
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
-    ${Boost_THREAD_LIBRARY}
-    ${Boost_REGEX_LIBRARY}
+  rpc_base
+  multisig
+  common
+  cryptonote_core
+  mnemonics
+  device_trezor
+  net
+  ${LMDB_LIBRARY}
+  ${Boost_CHRONO_LIBRARY}
+  ${Boost_SERIALIZATION_LIBRARY}
+  ${Boost_FILESYSTEM_LIBRARY}
+  ${Boost_SYSTEM_LIBRARY}
+  ${Boost_THREAD_LIBRARY}
+  ${Boost_REGEX_LIBRARY}
   PRIVATE
-    ${EXTRA_LIBRARIES})
+  ${EXTRA_LIBRARIES})
 
 if(NOT IOS)
   set(wallet_rpc_sources
@@ -84,23 +84,23 @@ if(NOT IOS)
 
   target_link_libraries(wallet_rpc_server
     PRIVATE
-      wallet
-      rpc_base
-      cryptonote_core
-      cncrypto
-      common
-      version
-      daemonizer
-      ${EPEE_READLINE}
-      ${Boost_CHRONO_LIBRARY}
-      ${Boost_PROGRAM_OPTIONS_LIBRARY}
-      ${Boost_FILESYSTEM_LIBRARY}
-      ${Boost_THREAD_LIBRARY}
-      ${CMAKE_THREAD_LIBS_INIT}
-      ${EXTRA_LIBRARIES})
+    wallet
+    rpc_base
+    cryptonote_core
+    cncrypto
+    common
+    version
+    daemonizer
+    ${EPEE_READLINE}
+    ${Boost_CHRONO_LIBRARY}
+    ${Boost_PROGRAM_OPTIONS_LIBRARY}
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_THREAD_LIBRARY}
+    ${CMAKE_THREAD_LIBS_INIT}
+    ${EXTRA_LIBRARIES})
   set_property(TARGET wallet_rpc_server
     PROPERTY
-      OUTPUT_NAME "monero-wallet-rpc")
+    OUTPUT_NAME "bokcoin-wallet-rpc")
   install(TARGETS wallet_rpc_server DESTINATION bin)
 endif()
 
