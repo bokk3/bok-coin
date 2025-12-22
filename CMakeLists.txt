@@ -1130,10 +1130,11 @@ if(MINGW)
     set(CMAKE_FIND_LIBRARY_SUFFIXES ${OLD_LIB_SUFFIXES})
   endif()
 elseif(APPLE OR OPENBSD OR ANDROID)
-  # libunbound on macOS (homebrew) has a transitive dependency on nghttp2
+  # libunbound on macOS (homebrew) has transitive dependencies on nghttp2 and libevent
   if(APPLE AND STATIC)
     find_library(NGHTTP2_LIBRARY nghttp2)
-    set(EXTRA_LIBRARIES ${NGHTTP2_LIBRARY})
+    find_library(EVENT_LIBRARY event)
+    set(EXTRA_LIBRARIES ${NGHTTP2_LIBRARY} ${EVENT_LIBRARY})
   else()
     set(EXTRA_LIBRARIES "")
   endif()

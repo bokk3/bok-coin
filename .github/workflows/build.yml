@@ -52,7 +52,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew update
-          brew install cmake boost openssl@3 zmq libsodium unbound hidapi libusb nghttp2
+          brew install cmake boost openssl@3 zmq libsodium unbound hidapi libusb nghttp2 libevent
 
       - name: Build static release
         env:
@@ -83,7 +83,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew update
-          brew install cmake boost openssl@3 zmq libsodium unbound hidapi libusb nghttp2
+          brew install cmake boost openssl@3 zmq libsodium unbound hidapi libusb nghttp2 libevent
 
       - name: Build
         env:
