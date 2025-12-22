@@ -22,7 +22,8 @@ jobs:
             libssl-dev libunbound-dev libzmq3-dev libsodium-dev \
             libreadline-dev libldns-dev libexpat1-dev libpgm-dev \
             libnorm-dev libgtest-dev libpcsclite-dev libhidapi-dev \
-            libusb-1.0-0-dev libudev-dev
+            libusb-1.0-0-dev libudev-dev \
+            libevent-dev nettle-dev libgmp-dev
 
       - name: Build static release
         run: |
@@ -51,7 +52,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew update
-          brew install cmake boost openssl@3 zmq libsodium unbound hidapi libusb
+          brew install cmake boost openssl@3 zmq libsodium unbound hidapi libusb nghttp2
 
       - name: Build static release
         env:
@@ -82,7 +83,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew update
-          brew install cmake boost openssl@3 zmq libsodium unbound hidapi libusb
+          brew install cmake boost openssl@3 zmq libsodium unbound hidapi libusb nghttp2
 
       - name: Build
         env:
@@ -146,10 +147,15 @@ jobs:
           make release-static-win64 -j$(nproc)
 
       - name: Package binaries
+        run: |
+          mkdir -p dist
+          # Find the bin directory (Makefile creates dynamic paths like build/MINGW64_*/release/bin)
+          find build -type d -name "bin" -path "*/release/*" -exec cp {}/*.exe dist/ \;
+          ls -la dist/
+
+      - name: Create archive
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force -Path dist
-          Copy-Item build/release/bin/*.exe dist/
           Compress-Archive -Path dist/* -DestinationPath bokcoin-windows-x64.zip
 
       - name: Upload artifacts

@@ -48,11 +48,11 @@ set(common_sources
   timings.cc
   combinator.cpp)
 
-if (STACK_TRACE)
+if(STACK_TRACE)
   list(APPEND common_sources stack_trace.cpp)
 endif()
 
-if (BACKCOMPAT)
+if(BACKCOMPAT)
   list(APPEND common_sources compat/glibc_compat.cpp)
 endif()
 
@@ -69,18 +69,18 @@ monero_add_library(common
   DEPENDS generate_translations_header)
 target_link_libraries(common
   PUBLIC
-    cncrypto
-    ${UNBOUND_LIBRARIES}
-    ${LIBUNWIND_LIBRARIES}
-    ${Boost_DATE_TIME_LIBRARY}
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
-    ${Boost_THREAD_LIBRARY}
-    ${Boost_REGEX_LIBRARY}
-    ${Boost_CHRONO_LIBRARY}
+  cncrypto
+  ${UNBOUND_LIBRARIES}
+  ${LIBUNWIND_LIBRARIES}
+  ${Boost_DATE_TIME_LIBRARY}
+  ${Boost_FILESYSTEM_LIBRARY}
+  ${Boost_SYSTEM_LIBRARY}
+  ${Boost_THREAD_LIBRARY}
+  ${Boost_REGEX_LIBRARY}
+  ${Boost_CHRONO_LIBRARY}
   PRIVATE
-    ${OPENSSL_LIBRARIES}
-    ${EXTRA_LIBRARIES})
+  ${OPENSSL_LIBRARIES}
+  ${EXTRA_LIBRARIES})
 
 #monero_install_headers(common
 #  ${common_headers})

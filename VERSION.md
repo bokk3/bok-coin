@@ -4,7 +4,7 @@ This document tracks all locations where version numbers are defined to ensure t
 
 ## Current Version
 
-**v0.1.1** - "Alpha Genesis"
+**v0.1.2** - "Build System Fixes"
 
 ## Version Locations
 
