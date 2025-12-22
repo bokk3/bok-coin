@@ -8,9 +8,9 @@ on:
 jobs:
   linux:
     name: Build Linux x86_64
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -32,7 +32,8 @@ jobs:
       - name: Package binaries
         run: |
           mkdir -p dist
-          cp build/release/bin/* dist/
+          # Find the bin directory (Makefile creates dynamic paths like build/Linux/_HEAD_detached_at_*/release/bin)
+          find build -type d -name "bin" -path "*/release/*" -exec cp {}/* dist/ \;
           cd dist && tar -czvf ../bokcoin-linux-x86_64.tar.gz *
 
       - name: Upload artifacts
@@ -45,7 +46,7 @@ jobs:
     name: Build macOS x86_64
     runs-on: macos-15-intel # Intel runner for x86_64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -63,7 +64,8 @@ jobs:
       - name: Package binaries
         run: |
           mkdir -p dist
-          cp build/release/bin/* dist/
+          # Find the bin directory (Makefile creates dynamic paths like build/Darwin/_HEAD_detached_at_*/release/bin)
+          find build -type d -name "bin" -path "*/release/*" -exec cp {}/* dist/ \;
           cd dist && tar -czvf ../bokcoin-macos-x86_64.tar.gz *
 
       - name: Upload artifacts
@@ -76,7 +78,7 @@ jobs:
     name: Build macOS ARM64 (Sequoia)
     runs-on: macos-15 # macOS 15 Sequoia, Apple Silicon
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -114,7 +116,7 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
